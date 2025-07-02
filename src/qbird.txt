@@ -1,0 +1,368 @@
+# ------------------------------------------------------------------------------
+#   Development Notes
+
+#   WRW 21-Mar-2025 - Originally at top of qbird.py / birdland_qt.py but got too big.
+# ------------------------------------------------------------------------------
+
+#   Use setObjectName() / findChild() for ui widget identification.
+#       Don't put widgets in Store(): s.mainTabBar = tab_widget
+#       Use Store() for other global-like variables.
+
+#   WRW 13-Feb-2025 - avoid use of findChild() as it requires knowledge
+#       of object internals, which I want to avoid. Use object accessor functions.
+#       Ok to expose signals emitted by an object.
+#       Migrated away from accessor functions in favor of signals/slots.
+
+#   WRW 14-Feb-2025 - Converted to signals/slots to send data to tables. A major
+#       simplification that isolates features. Removed most setObjectName() / findChild()
+#       calls.
+
+#   WRW 1-Feb-2025 - A curious situation arose today, which I had never seen before.
+#       Today I converted from passing around pointers to a couple of classes
+#       to make the class a singleton and include the module in each file
+#       as needed. That caused a circular-include situation, which I resolved
+#       by delaying the loading in a couple of cases. /// RESUME - revisit and
+#       maybe clean up a bit better by isolating some of the functions to a
+#       separate module. The FB and Config classes do not have to be
+#       instiated multiple times, just hold static data, so a singleton class is fine.
+
+#   WRW 2-Mar-2025 - a few suggestions of modules from Chat
+#       python-qt-material      Couldn't install
+#       python-darkstyle        Worked, might be worth exploring, looks good, includes light style, too.
+#       python-pyqtgraph
+#       python-prettyqt         Don't quite get it
+#       python-qtpywidgets      Not found
+#       python-qtawesome
+
+#   ----------------------------------------------------
+#   WRW 18-Apr-2025 - wasted an hour or two adding a build-time flag and excluding the data files
+#       from the build in the hopes of saving space and load time. It did, but negligible:
+#           199,080,304 Apr 18 09:08 birdland_qt*
+#           193,192,400 Apr 18 08:57 birdland_qt_prog*
+#       Not worth the effort but keep the flag incase ever want some other build-time feature.
+#   WRW 20-May-2025 - even more negligible since I no longer include Music-Index dir in package.
+
+#   ----------------------------------------------------
+#   Save for multiple screens: (width,height) = app.screens()[0].size().toTuple()
+#   No longer planning to support multiple screens. The secondary PDF window
+#   serves that purpose and can be moved to a secondary screen.
+
+#   ----------------------------------------------------
+#   This little bit of code made it easy to track down the expensive parts of startup.
+#   Keep for future need
+
+# import time
+# start_time = time.perf_counter()
+# def log_time(message):
+#     elapsed = time.perf_counter() - start_time
+#     print(f"[+{elapsed:0.3f}s] {message}")
+
+# log_time( "very top" )
+
+#   ----------------------------------------------------
+#   Also
+#       Qwt - Qt Widgets for Technical Applications
+
+#   Resource work:
+#   Install pyside6-rcc
+#       paru -S pyside6-tools-wrappers
+
+#   Release numbering, see:
+#       https://pridever.org/
+
+# ----------------------------------------------------
+#   Reminders:
+#       QTimer.singleShot(0, lambda: None )
+
+# ====================================================
+#   /// RESUME - Todo Now
+# ----------------------------------------------------
+
+
+
+# ----------------------------------------------------
+#   Documentation
+# ----------------------------------------------------
+#       Example of canonical and file names.
+#       Flow diagrams of data
+
+#       Windows Defender note
+#       Note from Chordpro about installing on MacOS
+#       MacOS Security issues:
+#           Privacy & Security -> Security -> Allow applications from
+#               Birdland-Qt Click on Open Anyway
+#       Give examples of selected configuration values for all three platforms?
+#       MySql supported but slow to build database.
+#       MacOs - must install vlc: brew install vlc
+#       Install vlc on windows in proposed location - 'Program Files'
+
+#       Minimal host dependencies
+#       Fake book info
+            https://www.cs.hmc.edu/~keller/jazz/TheJoyOfFakebooks.htm
+
+# ----------------------------------------------------
+#   Before Distribution
+# ----------------------------------------------------
+
+#       Rebuild all after update doc
+
+# ----------------------------------------------------
+#   Later Low Priority
+# ----------------------------------------------------
+#       Remove if False: and OMIT code
+#       Convert index management tools from PySimpleGui.
+#       Convert 'scales' work from PySimpleGui.
+#       Migrate to QProcess and signals from subprocess.Popen() approach.
+#       Perhaps split fb_config into smaller files? Yes, fb_config.py and bl_firstlaunch.py
+#       Think about adding Musecore file support.
+#       Think about adding Ultimate Guitar site support.
+#       Destination of print( ERROR, ERROR-DEV) is inconsistent, some to sys.stderr, some not.
+#       Review all ERROR prints, move some to message.
+#       Add theme builder module, User theme, maybe just hue selector for exp?
+
+# ----------------------------------------------------
+#   DONE:
+# ----------------------------------------------------
+#       Clean up build process.
+#       Remove all Bundle_Type references, not used, just noise now.
+#       Redo shortcuts again.
+#       Stop strange jumps on scrolling to top and bottom.
+#       Page-Up leaves page at top of scroll area, not bottom.
+#       Add glibc version to About Birdland
+#       Add small margin to text box to prevent clipping in browser thumbnail index count.
+#       Fix couple of backslash in path problems on widows with as_posix()
+#       Bring up Zoom window on ALL selecTab( MT.Browser ) calls.
+#       Tweak focus / activate / raise on Zoom window for more natural flow, still have to move cursor in some cases.
+#       Add missing thumbnails message to cover browser tab.
+#       Increase size of cover-browser thumbnails, add little more padding for index text
+#       Change up/down arrows again.
+#       Select row in link table with canon or file matching selected row in canon or link table
+#       Issue was with full path in 'c' option.
+#       MacOS - left and right arrows not advancing page.
+#       Add Canonical Book Names to Reports to present to user without extra data.
+#       If folder list is empty use '.' for all folders.
+#       Update left-panel browsers if browsers config option changes
+#       Restructure Edit Canonical->File tool.
+#       Add title counts for each src to two reports.
+#       Add status button to indicate a zoom window and click to bring to top.
+#       Remove _TitleFirst and _TitleLast nonsense, a few single spurious titles remain
+#       Add indicator of title count and src in browser images.
+#       Support clicking on audio and midi buttons in status bar.
+#       Add audio and midi buttons to status bar.
+#       Clean up scrolling, add fractional scrolling, B to get back to fit both.
+#       Change toggle fullscreen to do and exit fullscreen.
+#       Couple little conflicts in MacOS and Windows after earlier changes.
+#       Add PDF browser in new tab.
+#       Re-Instance only after change soundfont. Refactor AudioPlayer_Vlc.py.
+#       Create fake title for midi files without sidecards - '_'->' ', remove extension
+#       Enhance YouTube index code so can restart after error.
+#       Fix ERROR-DEV: saveIconColor not defined at getColoredSvgIcon().
+#       Test fresh launch with -d mysql to check for password request
+#       Add confdir userdatadir to calls to do_*.py routines
+#       Add --userdatadir option, pass through to build_tables.py                             
+#       Play with new audio player a bit, test playback position further.
+#       Save and restore audio player volume setting.
+#       Add context-menu search on midi and chordpro table.
+#       Try again to give title search box focus.
+#       Add PATH to about
+#       Right-click in music table - search for title, composer as if given in title box.
+#       Right-click in audio table - search for title, artist, album as if given in title box.
+#       Grey-out local audio controls unless specifically using. (tried, didn't work well)
+#       Add try/except around initialization and event loop, report probs with popup.
+#       Process raw index sources during initial launch, remove Music-Index dir from delivery.
+#       Test diff_index.py
+#       Test on MacOS, build .app and .dmg files.
+#       Change Appearance name to Theme
+#       Add Musescore and Chordpro executables options
+#       Gray out AudioPlayer buttons on init, activate on play.
+#       Tweak all themes.
+#       Complete migration to new theme facility.
+#       Add much better theme mechanism
+#       Move PDF scroll bar to popup window from main window on popup.
+#       Add record/playback for managed signals, not native signals.
+#       Update unit tests
+#       Convert splash screen to QDialog and make deterministic. Add progress to screen.
+#       Restrict Appearances to subset that works well.
+#       Clean up themes and styles, they are orthogonal. Option for both.
+#       Feedback in AudioPlayer buttons
+#       Use .svg icons, make consistent color, add to configuration window.
+#       Show midi sidecar, if any, in command output tab.
+#       Possible starting dir problem in MyPicker
+#       Test more on Windows, especially audio out.
+#       Review all program files with pyCharm
+#       Add midi, chordpro, and jjazzlab browsers
+#       Move file info back into left panel
+#       Add extra row of tabs to left panel.
+#       Review all '/// RESUME' comments, fix or delete.
+#       Fix page / sheet numbers.
+#       Added file/dir picker for book lists in config window.
+#       Test with MySql
+#       Test coldstart thoroughly.
+#       fb_make_desktop.py needs work with icon and program paths. Runs every time birdland launches.
+#       Cleanup constants, especially in fb_config, file access to bundled data.
+#       Load user data from package.
+#       Copy icon from resources to config dir
+#       Move QSettings() directory to primary configuration dir.
+#       Add AudioPlayer options to Config.
+#       Popup window on F11 instead of fullscreen, save and restore state.
+#       Save/restore window state.
+#       Alternate approach to command line options in birdland_qt.py
+#       Deal with standard paths as needed.
+#            from PySide6.QtCore import QStandardPaths
+#            config_path = QStandardPaths.writableLocation(QStandardPaths.AppConfigLocation)
+#            print(f"Config path: {config_path}")
+#       Remove all as_posix(), use str()
+#       Figure out packaging for Linux, Windows, and MacOS. Used pyinstaller on Linux, Windows so far.
+#       Add fullscreen support from icon and F11 for PDF file.
+#       Add vertical tabs for 'Library', 'Scales / Chords'?
+#       Replace pd.read_csv in index-specific with builtin csv
+#       Add startup logic from birdland 1.0
+#       Removed unnecessary includes with ruff check . --fix-only --select F401
+#           Also removed include of bl_resources_rc.
+#       Many character encoding problems on Windows. Be sure all open() specify encoding='utf-8'.
+#       TOC Click need signal
+#       Add canonical -> file mapping tab content
+#       Use signals to select tab and set visibility
+#       Index management -> process raw index sources, very little work, mostly add Store() for conf.
+#       Cleanup popup logic and appearance a bit.
+#       Centralize 'version' location
+#       Close media via signal, not direct call
+#       Validate audio file extension in AudioPlayer.py, raise error if not supported.
+#       Look at removing leftTabBar and pdf_viewer from Store() global store.
+#       Test for file existence at all bl_media.py media routines
+#       Move main tab bar into separate class?
+#       Move setlist object from bl_main_window into bl_setlist?
+#       Load all PDF via signal, not direct call
+#       Add midi->score.
+#       Test using fluidsynth in lieu of timidity
+#           fluidsynth -ni soundfont.sf2 input.mid -F output.wav
+
+# ----------------------------------------------------
+#   SUSPENDED:
+# ----------------------------------------------------
+#       Stay in place when hit return and no more found in search on canon->file tab. No, OK as is.
+#       Explore qt_material. On first glance it looked terrible.
+#       Expand both tab bars to available width. (tried before, no luck)
+#       Spawn remote pdf viewer, or display pdf on separate monitor. No, just existing large window.
+#       Fullscreen F11 only if PDF tab active. No, leave it as is, might be more useful.
+#       Add command line option options to config window? 
+#            Don't understand item. Maybe to use mysql, optional config dir?
+
+# ----------------------------------------------------
+#   NOTES:
+# ----------------------------------------------------
+#       WRW 29-Mar-2025 - Recompiled and tested fullword support. Works in bundle.
+
+# ------------------------------------------------------------------------------
+
+pyinstaller notes:
+
+    time pyinstaller birdland_qt.spec --clean --log-level=DEBUG --distpath ~/Uploads/pyinstaller/
+
+    pyi-archive_viewer dist/app
+        ls to list all files
+        extract file.py
+
+    pyi-makespec options name.py
+
+    dist/app --debug all
+
+# ------------------------------------------------------------------------------
+#   Refresh KDE so it sees the .desktop file.
+
+#       kbuildsycoca5 --noincremental
+
+# ------------------------------------------------------------------------------
+#   Rebuild resources:
+#       Installed with: paru -S pyside6-tools-wrappers
+
+#       pyside6-rcc bl_resources.qrc -o bl_resources_rc.py
+
+# ------------------------------------------------------------------------------
+#   Exploring qdarkstyle
+
+#   python -m qdarkstyle.example --qt_from pyside6
+
+
+# ------------------------------------------------------------------------------
+#   Mount audio files:
+
+#       sudo mount //smetana/music /home/wrw/Media/Music
+
+# ------------------------------------------------------------------------------
+
+Mount MacOs
+```
+sudo mount -t cifs //Parker/wrw /tmp/mnt -o username=wrw,password=cabbage3,rw,uid=$(id -u),gid=$(id -g),file_mode=0755,dir_mode=0755
+sudo mount -t cifs //Parker/wrw /tmp/mnt -o rw,uid=$(id -u),gid=$(id -g),file_mode=0755,dir_mode=0755
+
+```
+
+# ------------------------------------------------------------------------------
+When troubleshooting a problem with birdland_qt.app inside birdland_qt.dmg I
+clicked on the .dmg file to mount and then went to:
+
+/Volumes/Birdland Qt Installer:
+
+    Look at attributes of .app, perhaps quarrantined:
+        xattr -l birdland_qt.app
+
+    This showd up a problem with a unicode character in a packaged file:
+        codesign --verify --deep --strict --verbose=2 birdland_qt.app
+
+# ------------------------------------------------------------------------------
+#   Existing files copied from .config/birdland_qt to new config directory
+
+-rw-r--r-- 1 wrw wrw     7,004 May 21 09:42 birdland_qt.conf
+-rw-r--r-- 1 wrw wrw 1,577,625 May 21 09:43 Gershwin-Audio-Index.json.gz
+-rw-r--r-- 1 wrw wrw     7,476 May 21 09:43 Gershwin-Canonical2File.txt
+-rw-r--r-- 1 wrw wrw     7,305 May 21 09:43 Gershwin-Ext-Canonical2File.txt
+
+# ------------------------------------------------------------------------------
+#   Notes from chat on the timing issues I struggled with in PDF_Browser.py
+
+ð Why it's tricky
+Qt (and by extension, PySide) relies heavily on its event loop, but:
+
+GUI updates (like showing a new cursor or redrawing widgets) only happen
+after control returns to the event loop.
+
+Heavy work (like rendering PDFs) blocks the event loop if done in the main
+thread.
+
+Timers like QTimer.singleShot(...) seem asynchronous, but inside loops
+they still schedule all at once.
+
+This creates unintuitive behavior â setting a cursor or adding widgets
+may silently fail to update visually if you donât yield to the event loop.
+
+
+ð Documentation & Resources
+Thereâs no single official âQt timing and repaintingâ guide, but here are the most helpful sources and topics:
+
+â Key Qt docs:
+Qt Event Loop Overview â Explains how events are handled and when UI updates occur.
+
+QApplication.processEvents() â Describes manually letting the event loop run.
+
+QTimer.singleShot() â Useful but misleading in loops unless you're careful.
+
+ð Specific concepts worth reading up:
+Qt Repaint Mechanics: How widgets update (triggering repaint() vs. update()).
+
+UI Thread vs. Worker Thread: Best practices for long-running tasks (see QThread and QRunnable).
+
+Event Loop Yielding: When and why you need to "return to the loop" to allow GUI actions to actually take effect.
+
+ð Book-level detail:
+"Advanced Qt Programming" by Mark Summerfield (C++ examples, but deeply explains event loop and repainting)
+
+PySide tutorials on asynchronous GUI updates are rare but scattered across sites like:
+
+Stack Overflow
+
+QtCentre forums
+
+Real Python (PyQt example-based, but 95% applies)
+
+# ------------------------------------------------------------------------------

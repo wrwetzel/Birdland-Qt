@@ -1,0 +1,45 @@
+<!DOCTYPE RCC>
+<RCC version="1.0">
+<qresource>
+    <file>Icons/Saxophone_64.ico</file>
+    <file>Icons/Saxophone_64.png</file>
+
+    <file>Images/splash-piano-hori-640-mixed-case.png</file>
+
+    <file alias="Documentation/birdland.pdf">../Documentation/birdland.pdf</file>
+    <file alias="Documentation/quickstart.pdf">../Documentation/quickstart.pdf</file>
+    <file alias="Documentation/configuration.pdf">../Documentation/configuration.pdf</file>
+    <file alias="Documentation/License.txt">../Documentation/License.txt</file>
+    <file>birdland.conf.proto</file>
+
+    <file>NIcons/albumfolder-new.svg</file>
+    <file>NIcons/document-open-folder.svg</file>
+    <file>NIcons/document-properties.svg</file>
+    <file>NIcons/folder-symbolic.svg</file>
+    <file>NIcons/media-playback-pause.svg</file>
+    <file>NIcons/media-playback-start.svg</file>
+    <file>NIcons/media-playback-stop.svg</file>
+    <file>NIcons/media-seek-backward.svg</file>
+    <file>NIcons/media-seek-forward.svg</file>
+    <file>NIcons/media-skip-backward.svg</file>
+    <file>NIcons/media-skip-forward.svg</file>
+    <file>NIcons/view-fullscreen.svg</file>
+    <file>NIcons/view-zoom-fit-height-symbolic.svg</file>
+    <file>NIcons/view-zoom-fit-symbolic.svg</file>
+    <file>NIcons/view-zoom-fit-width-symbolic.svg</file>
+    <file>NIcons/view-zoom-in-symbolic.svg</file>
+    <file>NIcons/view-zoom-out-symbolic.svg</file>
+    <file>NIcons/zoom-fit-height.svg</file>
+    <file>NIcons/zoom-fit-width.svg</file>
+    <file>NIcons/zoom-in.svg</file>
+    <file>NIcons/zoom-next.svg</file>
+    <file>NIcons/zoom-out.svg</file>
+    <file>NIcons/zoom-previous.svg</file>
+    <file>NIcons/go-first-view-page.svg</file>
+    <file>NIcons/go-last-view.svg</file>
+
+    <file>palettes.csv</file>
+
+</qresource>
+</RCC>
+

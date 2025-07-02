@@ -1,0 +1,35 @@
+# --------------------------------------------------------------------
+#   requirements.txt for Birdland
+
+#   pip install -r requirements.txt
+
+#   Uncomment mysqlclient to use MySql database, i.e.:
+#       'birdland -d mysql'
+
+# --------------------------------------------------------------------
+
+click
+configobj
+jinja2
+Levenshtein
+mido
+mutagen
+PyMuPDF
+pyside6
+qdarkstyle
+unidecode
+
+# mysqlclient             # only if using MySql database
+# youtube-search-python   # only to run get-youtube-links.py
+# pillow                  # only if using Index Management -> Create Index feature
+# pytesseract             # only if using Index Management -> Create Index feature
+
+# --------------------------------------------------------------------
+#   On Arch:
+#       paru -S python-pymupdf
+#       paru -S python-unidecode
+#       etc ...
+# --------------------------------------------------------------------
+
+
+
