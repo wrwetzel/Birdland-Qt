@@ -1,19 +1,20 @@
 # ![saxophone](Documentation/Images/Saxophone_64.png) Birdland-Qt                  
 
-Birdland is a multimedia music viewer and library manager for music books in PDF form with
-specific attention to fakebooks.  It displays a page of music by searching a database of
-titles and other metadata.                                                             
-It also displays non-indexed PDF files but without
-metadata searching.  Birdland ships with index data from 9 sources covering over 100 books
-and over 20,000 titles.
+Birdland is a multimedia music viewer and library manager for music books
+in PDF form with specific attention to fakebooks.  It displays a page of
+music by searching a database of titles and other metadata.  It also
+displays non-indexed PDF files but without metadata searching.  Birdland
+ships with index data from 9 sources covering over 100 books and over
+20,000 titles.
 
-Answering the *Let's hear how it goes* question, search results also include links to
-audio files, MIDI files, ChordPro files, and JJazzLab songs from your media library, and
-and relevant YouTube videos.
+Answering the *Let's hear how it goes* question, search results also
+include links to audio files, MIDI files, ChordPro files, and JJazzLab
+songs from your media library, and and relevant YouTube videos.
 
-The *Lite* version includes indexes for  many popular fake books compiled from several sources but does
-not include *Index Management* tools to create or manage your own indexes.
-These tools will be included in a future release.
+The *Lite* version includes indexes for many popular fake books compiled
+from several sources but does not include *Index Management* tools to
+create or manage your own indexes.  These tools will be included in a
+future release.
 
 *Birdland-Qt* is a cross-platform application that runs on Windows, macOS, and Linux.
 
