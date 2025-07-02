@@ -1,4 +1,6 @@
 ,*
+*~      # ignore any file ending with ~
+*.un~   # ignore specifically files ending with .un~
 .es1*
 .es2*
 .ec1*

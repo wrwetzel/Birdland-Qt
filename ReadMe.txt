@@ -14,7 +14,15 @@ not maintained the onefile scripts.
 
 As of 14-May-2025 I'm planning to distribute only the onedir bundles.
 
-Be sure to run update-version.sh as first step
+Run build scripts in virtual environment:
+    ~/Virtual-Environments/What.venv            
+        Activate with fish function: 'activate-what'
+
+-------------------------------------------------------------------------
+
+Reminder:
+    activate-what
+    update-version.sh           Run before any builds.
 
 -------------------------------------------------------------------------
 
@@ -23,15 +31,17 @@ Directions for Making a Release:
     Preparatory:
 
         Update build number and several version-related files.  
-            (This is no longer done in the build Linux script so that it
-            can be run as a first step and eliminate order dependencies.)
-            Generates:
-                fb_version.py
-                fb_version.iss
-                fb_version.sh
-                ../Documentation/download-inc.html
 
             build-version.sh
+
+                (This is no longer done in the build Linux script so that it
+                can be run as a first step and eliminate order dependencies.)
+                Generates:
+                    fb_version.py
+                    fb_version.iss
+                    fb_version.sh
+                    ../Documentation/download-inc.html
+
 
     Documentation:
 
